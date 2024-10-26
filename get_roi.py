@@ -1,21 +1,10 @@
-import SimpleITK as sitk
 import os
 import argparse
 import numpy as np
 import cv2
-import copy
-import pandas as pd
-import numpy as np
-import copy
-import time
 import torch
 from torchvision import transforms
-import matplotlib.pyplot as plt
-import os
-import SimpleITK as sitk 
 from PIL import Image, ImageDraw
-import json
-from scipy.stats import norm
 
 from network_files import MaskRCNN
 from backbone import resnet50_fpn_backbone
@@ -147,29 +136,6 @@ def get_roi(args) :
             cv2.imwrite(f"{args.results_path}/centers/{img_name}_centers.png", image)
 
         print(f"{img_name} done! ")
-
-
-
-# 在每个mask上取出牙齿的中心
-def mask_tooth_center(image, boxes, classes, scores, masks, box_thresh: float = 0.7, thresh:float = 0.7):
-     # 过滤掉低概率的目标
-    idxs = np.greater(scores, box_thresh)
-    boxes = boxes[idxs]
-    classes = classes[idxs]
-    scores = scores[idxs]
-    if masks is not None:
-        masks = masks[idxs]
-    
-    np_image = np.array(image)
-    masks = np.where(masks > thresh, True, False)
-    centers = []
-    for mask in masks:
-        mask = mask.astype("uint8")
-        ret, labels, stats, centroid = cv2.connectedComponentsWithStats(mask)
-        centroid = centroid.astype(int)
-        if len(centroid) >= 2:
-            centers.append(centroid[1])
-    return np.array(centers)
 
 
 if __name__ == '__main__':
