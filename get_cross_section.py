@@ -64,7 +64,7 @@ def get_cross_section(args) :
             if num <= data_mean + anomaly and num >= data_mean - anomaly :
                 coordinates.append(num)
 
-        cs_num = np.max(coordinates[:len(coordinates) // 4])   # 选择前三个坐标中最大的
+        cs_num = np.max(coordinates[:len(coordinates) // 4])   # 选择前四分之一的点中y轴坐标最大的
         cross_section = dicom[cs_num, :, :]
         cv2.imwrite(f"{args.results_path}/cross_section/{str(it+1).zfill(4)}_cross_section.png", cross_section)
         
